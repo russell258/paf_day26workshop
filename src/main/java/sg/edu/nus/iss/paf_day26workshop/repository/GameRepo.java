@@ -93,7 +93,38 @@ public class GameRepo {
         return template.findOne(q,Document.class,"game");
     }
 
-    
+    // create query to retrieve rating for each game
+    public Integer getSumOfRatings(Integer id){
+        Criteria c = Criteria.where("gid").is(id);
+
+        Query q = Query.query(c);
+
+        List<Document> list = template.find(q,Document.class,"comment");
+
+        List<Integer> ratingList = new ArrayList<>();
+
+        for (Document d: list){
+            ratingList.add(d.getInteger("rating"));
+        }
+
+        Integer sum = 0;
+
+        for (Integer integer: ratingList){
+            sum+= integer;
+        }
+
+        return sum;
+    }
+
+    public long countComments(Integer id){
+        Criteria c = Criteria.where("gid").is(id);
+        Query q = Query.query(c);
+
+        return template.count(q,"comment");
+
+    }
+
+
 
 
 }
